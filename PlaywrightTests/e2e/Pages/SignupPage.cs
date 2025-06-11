@@ -6,7 +6,6 @@ namespace PlaywrightTests;
 
 public class SignupPage(IPage page)
 {
-  private readonly IPage _page = page;
   private readonly ILocator _businessTypeIndex = page.Locator("label").Filter(new() { HasText = "E-commerceI sell physical" }).Locator("span").Nth(2);
   private readonly ILocator _legalStatusDropdown = page.Locator("#legalStatus").GetByRole(AriaRole.Textbox);
   private readonly ILocator _companyStatus = page.GetByRole(AriaRole.Option, new() { Name = "Company" }).Locator("div");
@@ -34,7 +33,7 @@ public class SignupPage(IPage page)
   public async Task FillinBusinessDetails(string company, string country, string street, string buildingNumber, string city, string zipCode)
   {
     // Wait for a key element to ensure the page is fully loaded
-    await _page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+    await page.WaitForLoadStateAsync(LoadState.NetworkIdle);
 
     await _businessTypeIndex.ClickAsync();
     await _legalStatusDropdown.ClickAsync();
@@ -47,7 +46,7 @@ public class SignupPage(IPage page)
     await _cityInput.FillAsync(city);
     await _zipCodeInput.FillAsync(zipCode);
     await _nextButton.ClickAsync();
-    await _page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+    await page.WaitForLoadStateAsync(LoadState.NetworkIdle);
 
   }
 
