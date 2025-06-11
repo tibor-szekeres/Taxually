@@ -437,6 +437,7 @@
 /Users/szekerestibor/Desktop/Taxually/PlaywrightTests/obj/Debug/net9.0/PlaywrightTests.AssemblyInfoInputs.cache
 /Users/szekerestibor/Desktop/Taxually/PlaywrightTests/obj/Debug/net9.0/PlaywrightTests.AssemblyInfo.cs
 /Users/szekerestibor/Desktop/Taxually/PlaywrightTests/obj/Debug/net9.0/PlaywrightTests.csproj.CoreCompileInputs.cache
+/Users/szekerestibor/Desktop/Taxually/PlaywrightTests/obj/Debug/net9.0/PlaywrightTests.sourcelink.json
 /Users/szekerestibor/Desktop/Taxually/PlaywrightTests/obj/Debug/net9.0/Playwrig.3B805853.Up2Date
 /Users/szekerestibor/Desktop/Taxually/PlaywrightTests/obj/Debug/net9.0/PlaywrightTests.dll
 /Users/szekerestibor/Desktop/Taxually/PlaywrightTests/obj/Debug/net9.0/refint/PlaywrightTests.dll
