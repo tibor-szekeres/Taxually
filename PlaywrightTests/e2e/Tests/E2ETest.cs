@@ -1,10 +1,6 @@
-﻿using System.Security.Cryptography.X509Certificates;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
+﻿using System.Text.RegularExpressions;
 using Microsoft.Playwright;
 using Microsoft.Playwright.NUnit;
-using Microsoft.VisualBasic;
-using NUnit.Framework;
 
 using PlaywrightTests;
 

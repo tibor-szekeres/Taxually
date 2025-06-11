@@ -6,6 +6,8 @@ obj/
 .vscode/
 *.user
 *.suo
+*.dll
+*.pdb
 
 # Playwright binaries and cache
 **/.playwright/
