@@ -1,6 +1,6 @@
 # .NET build outputs
-bin/
-obj/
+PlaywrightTests/bin/
+PlaywrightTests/obj/
 
 # User-specific files
 .vscode/

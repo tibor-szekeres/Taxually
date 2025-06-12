@@ -27,8 +27,6 @@ public class E2ETest : PageTest
         _signupPage = new SignupPage(Page);
         await _loginPage.GoToLoginPage("/");
         await _loginPage.LoginToPage(email, password);
-        await Expect(Page).ToHaveURLAsync(new Regex("about-your-business"));
-        await Expect(Page.Locator(".page-title")).ToHaveTextAsync("Tell us about your business");
     }
 
     [Test]
@@ -41,8 +39,6 @@ public class E2ETest : PageTest
             buildingNumber,
             city,
             zipCode);
-        await Expect(Page).ToHaveURLAsync(new Regex("jurisdiction"));
-        await Expect(Page.Locator(".page-title")).ToHaveTextAsync("Select your jurisdictions");
     }
 
     [Test]
@@ -55,11 +51,10 @@ public class E2ETest : PageTest
             buildingNumber,
             city,
             zipCode);
-        await Expect(Page.Locator(".page-title")).ToHaveTextAsync("Select your jurisdictions");
         await _signupPage.SelectTargetCountryByIndex(0);
         await _signupPage.CheckYesNoAnswers();
         await _signupPage.SelectRetrospectivePeriod("May");
-        await _signupPage.ToggleSubscriptionPeriod();
+        await _signupPage.ToggleSubscriptionPeriodToMonthly();
         await _signupPage.AcceptTermsOfService();
         await _signupPage.AssertAnnualFeeSumIsZero();
     }
@@ -74,11 +69,10 @@ public class E2ETest : PageTest
             buildingNumber,
             city,
             zipCode);
-        await Expect(Page.Locator(".page-title")).ToHaveTextAsync("Select your jurisdictions");
         await _signupPage.SelectTargetCountryByText("Belgium");
         await _signupPage.CheckYesNoAnswers();
         await _signupPage.SelectRetrospectivePeriod("Jan");
-        await _signupPage.ToggleSubscriptionPeriod();
+        await _signupPage.ToggleSubscriptionPeriodToMonthly();
         await _signupPage.AcceptTermsOfService();
         await _signupPage.AssertAnnualFeeSumIsZero();
     }

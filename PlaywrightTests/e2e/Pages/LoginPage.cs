@@ -20,6 +20,6 @@ public class LoginPage(IPage page)
         await _passwordInput.FillAsync(password);
         await _loginButton.ClickAsync();
         await page.WaitForLoadStateAsync(LoadState.NetworkIdle);
-
+        Assert.That(await page.Locator(".page-title").TextContentAsync(), Does.Contain("Tell us about your business"), "Page title does not match expected value after login.");
     }
 }

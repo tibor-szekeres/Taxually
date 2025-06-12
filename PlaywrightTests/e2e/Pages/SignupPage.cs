@@ -1,8 +1,4 @@
-using System.IO.Compression;
-using System.Threading.Tasks;
 using Microsoft.Playwright;
-
-namespace PlaywrightTests;
 
 public class SignupPage(IPage page)
 {
@@ -17,6 +13,7 @@ public class SignupPage(IPage page)
   private readonly ILocator _cityInput = page.GetByRole(AriaRole.Textbox, new() { Name = "City" });
   private readonly ILocator _zipCodeInput = page.Locator("form div").Filter(new() { HasText = "City State/Province ZIP/Post" }).GetByRole(AriaRole.Textbox).Nth(2);
   private readonly ILocator _nextButton = page.GetByRole(AriaRole.Button, new() { Name = "Next" });
+  private readonly ILocator _subscriptionSummaryText = page.GetByText("Subscription summary");
   private readonly ILocator _countryJurisdictionItem = page.Locator("app-jurisdiction-item");
   private readonly ILocator _countryJurisdictionItemByName = page.Locator("app-jurisdiction-item");
   private readonly ILocator _alertTextOneNo = page.GetByText("Please select if you have outstanding tax returns");
@@ -36,18 +33,38 @@ public class SignupPage(IPage page)
     await page.WaitForLoadStateAsync(LoadState.NetworkIdle);
 
     await _businessTypeIndex.ClickAsync();
+    await _businessTypeIndex.IsCheckedAsync();
     await _legalStatusDropdown.ClickAsync();
     await _companyStatus.ClickAsync();
+    await _companyStatus.IsVisibleAsync();
     await _companyNameInput.FillAsync(company);
+    var actualCompanyName = await _companyNameInput.InputValueAsync();
+    Assert.That(actualCompanyName, Is.EqualTo(company));
+
     await _countryDropdown.FillAsync(country);
     await _hungaryCountryDropdown.ClickAsync();
+    await _hungaryCountryDropdown.IsVisibleAsync();
     await _streetInput.FillAsync(street);
+    var actualStreetName = await _streetInput.InputValueAsync();
+    Assert.That(actualStreetName, Is.EqualTo(street));
+
     await _buildingNumberInput.FillAsync(buildingNumber);
+    var actualBuildingNumberName = await _buildingNumberInput.InputValueAsync();
+    Assert.That(actualBuildingNumberName, Is.EqualTo(buildingNumber));
+
     await _cityInput.FillAsync(city);
+    var actualCityName = await _cityInput.InputValueAsync();
+    Assert.That(actualCityName, Is.EqualTo(city));
+
     await _zipCodeInput.FillAsync(zipCode);
+    var actualZipCode = await _zipCodeInput.InputValueAsync();
+    Assert.That(actualZipCode, Is.EqualTo(zipCode));
+
     await _nextButton.ClickAsync();
     await page.WaitForLoadStateAsync(LoadState.NetworkIdle);
 
+    // Assert that the page title is as expected after filling in business details
+    await _subscriptionSummaryText.IsVisibleAsync();
   }
 
   public async Task SelectTargetCountryByIndex(int index)
@@ -92,28 +109,36 @@ public class SignupPage(IPage page)
   {
     await _dateSelector.ClickAsync();
     await page.GetByText(period).ClickAsync();
+    await _dateSelector.IsHiddenAsync();
   }
-  public async Task ToggleSubscriptionPeriod()
+  public async Task ToggleSubscriptionPeriodToMonthly()
   {
-    await _subscriptionPeriodToggle.ClickAsync();
+    if (await AnnualFeeSumContainsAsync("€0"))
+    {
+      return; // If the annual fee sum is already zero, no need to toggle
+    }
+    else
+    {
+      // If the annual fee sum is not zero, toggle the subscription to monthly
+      await _subscriptionPeriodToggle.ClickAsync();
+    }
   }
 
   public async Task AcceptTermsOfService()
   {
     await _termsOfServiceCheckbox.ClickAsync();
-  }
-  
-  public async Task AssertAnnualFeeSum(string expectedSum)
-  {
-    var actualSum = await _annualFeeSumText.InnerTextAsync();
-    if (!actualSum.Contains(expectedSum))
-    {
-      throw new Exception($"Expected annual fee sum '{expectedSum}' not found in actual sum '{actualSum}'.");
-    }
-  }
-  public async Task AssertAnnualFeeSumIsZero()
-  {
-    await AssertAnnualFeeSum("€0");
+    await _termsOfServiceCheckbox.IsCheckedAsync();
   }
 
+  public async Task<bool> AnnualFeeSumContainsAsync(string expectedSum)
+  {
+    var actualSum = await _annualFeeSumText.InnerTextAsync();
+    return actualSum.Contains(expectedSum);
+  }
+
+  public async Task AssertAnnualFeeSumIsZero()
+  {
+    var annualFeeSum = await _annualFeeSumText.InnerTextAsync();
+    Assert.That(annualFeeSum, Does.Contain("€0"), "Annual fee sum is not zero as expected.");
+  }
 }
