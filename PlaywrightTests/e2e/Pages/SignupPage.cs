@@ -105,10 +105,11 @@ public class SignupPage(IPage page)
   }
 
 
-  public async Task SelectRetrospectivePeriod(string period)
+  public async Task SelectRetrospectivePeriod(string month)
   {
+    // Selects only this year given month and asserts if placeholder is not visible
     await _dateSelector.ClickAsync();
-    await page.GetByText(period).ClickAsync();
+    await page.GetByText(month).ClickAsync();
     await _dateSelector.IsHiddenAsync();
   }
   public async Task ToggleSubscriptionPeriodToMonthly()
